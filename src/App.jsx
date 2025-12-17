@@ -448,7 +448,8 @@ export default function App() {
           initial={{ y: "100%" }}
           animate={{ y: isMusicOpen ? 0 : "100%" }}
           transition={{ type: "spring", damping: 25, stiffness: 200 }}
-          className="absolute bottom-0 left-0 right-0 z-[60] bg-[#121212] border-t border-white/10 rounded-t-3xl p-6 shadow-2xl min-h-[550px]"
+          // CORREÇÃO: Mudei de 'absolute' para 'fixed' para impedir o scroll automático
+          className="fixed bottom-0 left-0 right-0 z-[60] bg-[#121212] border-t border-white/10 rounded-t-3xl p-6 shadow-2xl min-h-[550px]"
         >
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold flex items-center gap-2 text-green-400"><Music /> Spotify Vibe</h2>
@@ -497,7 +498,18 @@ export default function App() {
 
           <div className="w-full h-[250px] bg-black/20 rounded-xl overflow-hidden relative shadow-lg">
             {currentPlaylist ? (
-              <iframe style={{ borderRadius: "12px" }} src={currentPlaylist} width="100%" height="100%" frameBorder="0" allowFullScreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+              <iframe 
+                style={{ borderRadius: "12px" }} 
+                src={currentPlaylist} 
+                width="100%" 
+                height="100%" 
+                frameBorder="0" 
+                allowFullScreen="" 
+                // Mantive o sandbox por segurança, mas o 'fixed' no CSS acima é o que resolve o salto
+                sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-storage-access-by-user-activation allow-top-navigation-by-user-activation"
+                allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" 
+                loading="lazy"
+              ></iframe>
             ) : (
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white/30 gap-2"><Music size={40} /><div className="text-sm">Select a playlist to start</div></div>
             )}
